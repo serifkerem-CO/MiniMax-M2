@@ -1,0 +1,62 @@
+[
+  {
+    "id": "tech_1",
+    "prompt": "Explain the concept of microservices architecture in 2-3 sentences.",
+    "system_prompt": "You are a software architecture expert. Be concise and technical.",
+    "metadata": {"category": "architecture", "difficulty": "intermediate"}
+  },
+  {
+    "id": "tech_2",
+    "prompt": "What are the SOLID principles in software development?",
+    "system_prompt": "You are a software architecture expert. Be concise and technical.",
+    "metadata": {"category": "principles", "difficulty": "intermediate"}
+  },
+  {
+    "id": "code_1",
+    "prompt": "Write a Python function to check if a string is a palindrome.",
+    "system_prompt": "You are an expert Python developer. Provide clean, efficient code.",
+    "metadata": {"category": "coding", "language": "python"}
+  },
+  {
+    "id": "code_2",
+    "prompt": "Write a JavaScript function to debounce another function.",
+    "system_prompt": "You are an expert JavaScript developer. Provide clean, modern code.",
+    "metadata": {"category": "coding", "language": "javascript"}
+  },
+  {
+    "id": "explain_1",
+    "prompt": "What is the difference between SQL and NoSQL databases?",
+    "system_prompt": "You are a database expert. Explain clearly for developers.",
+    "metadata": {"category": "databases", "difficulty": "beginner"}
+  },
+  {
+    "id": "explain_2",
+    "prompt": "Explain the CAP theorem and its implications for distributed systems.",
+    "system_prompt": "You are a distributed systems expert. Be precise and informative.",
+    "metadata": {"category": "distributed", "difficulty": "advanced"}
+  },
+  {
+    "id": "devops_1",
+    "prompt": "What is the difference between Docker and Kubernetes?",
+    "system_prompt": "You are a DevOps expert. Explain clearly and concisely.",
+    "metadata": {"category": "devops", "difficulty": "beginner"}
+  },
+  {
+    "id": "devops_2",
+    "prompt": "Explain CI/CD pipeline best practices.",
+    "system_prompt": "You are a DevOps expert. Provide actionable recommendations.",
+    "metadata": {"category": "devops", "difficulty": "intermediate"}
+  },
+  {
+    "id": "security_1",
+    "prompt": "What are the OWASP Top 10 security risks?",
+    "system_prompt": "You are a security expert. Be precise and educational.",
+    "metadata": {"category": "security", "difficulty": "intermediate"}
+  },
+  {
+    "id": "ml_1",
+    "prompt": "Explain the difference between supervised and unsupervised learning.",
+    "system_prompt": "You are a machine learning expert. Use clear examples.",
+    "metadata": {"category": "ml", "difficulty": "beginner"}
+  }
+]
