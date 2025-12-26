@@ -1,0 +1,62 @@
+[
+  {
+    "id": "math_add",
+    "prompt": "45 + 78 kaçtır? Sadece sayıyı yaz.",
+    "expected": "123",
+    "category": "math"
+  },
+  {
+    "id": "math_mult",
+    "prompt": "12 x 8 kaçtır? Sadece sayıyı yaz.",
+    "expected": "96",
+    "category": "math"
+  },
+  {
+    "id": "math_sqrt",
+    "prompt": "81'in karekökü kaçtır? Sadece sayıyı yaz.",
+    "expected": "9",
+    "category": "math"
+  },
+  {
+    "id": "fact_capital",
+    "prompt": "Fransa'nın başkenti neresidir?",
+    "expected": "Paris",
+    "category": "facts"
+  },
+  {
+    "id": "fact_inventor",
+    "prompt": "Elektrik ampulünü kim icat etti?",
+    "expected": "Edison",
+    "category": "facts"
+  },
+  {
+    "id": "code_loop",
+    "prompt": "Python'da 1'den 5'e kadar sayıları yazdıran kod yaz.",
+    "expected": "for,print,range",
+    "category": "code"
+  },
+  {
+    "id": "code_func",
+    "prompt": "Python'da iki sayıyı toplayan fonksiyon yaz.",
+    "expected": "def,return,+",
+    "category": "code"
+  },
+  {
+    "id": "reason_age",
+    "prompt": "Ali 10 yaşında, kardeşi ondan 3 yaş küçük. Kardeşi kaç yaşında?",
+    "expected": "7",
+    "category": "reasoning"
+  },
+  {
+    "id": "trans_hello",
+    "prompt": "'Günaydın' kelimesini İngilizce'ye çevir.",
+    "expected": "good morning",
+    "category": "translation"
+  },
+  {
+    "id": "logic_odd",
+    "prompt": "1, 2, 3, 4, 5, 6, 7, 8, 9, 10 sayılarından kaç tanesi tek sayıdır?",
+    "expected": "5",
+    "category": "logic"
+  }
+]

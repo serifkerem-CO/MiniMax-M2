@@ -1,124 +1,162 @@
-# MiniMax-M2 Project Templates
+# MiniMax-M2 Proje Şablonları / Project Templates
+
+MiniMax-M2 ile hızlıca başlamak için kullanıma hazır proje şablonları.
 
 Ready-to-use project templates to quickly get started with MiniMax-M2.
 
-## Available Templates
+## Mevcut Şablonlar / Available Templates
 
-| Template | Description | Use Case |
-|----------|-------------|----------|
-| [basic-api](./basic-api) | Simple API interaction | Getting started, basic queries |
-| [tool-calling-agent](./tool-calling-agent) | Agent with function calling | Agentic workflows, automation |
-| [coding-assistant](./coding-assistant) | Code analysis and generation | Development assistance |
-| [streaming-chat](./streaming-chat) | Real-time chat interface | Interactive applications |
-| [batch-processing](./batch-processing) | Process multiple prompts | Data processing, evaluation |
+| Şablon | Açıklama | Kullanım Alanı |
+|--------|----------|----------------|
+| [basic-api](./basic-api) | Basit API etkileşimi | Başlangıç, temel sorgular |
+| [tool-calling-agent](./tool-calling-agent) | Fonksiyon çağırmalı ajan | Agentic iş akışları, otomasyon |
+| [coding-assistant](./coding-assistant) | Kod analizi ve üretimi | Geliştirme yardımı |
+| [streaming-chat](./streaming-chat) | Gerçek zamanlı sohbet | İnteraktif uygulamalar |
+| [batch-processing](./batch-processing) | Toplu istek işleme | Veri işleme, değerlendirme |
+| [rag-system](./rag-system) | RAG sistemi | Belge tabanlı soru-cevap |
+| [fastapi-server](./fastapi-server) | REST API sunucusu | Web servisleri, API |
+| [langchain-integration](./langchain-integration) | LangChain entegrasyonu | Framework kullanımı |
+| [discord-bot](./discord-bot) | Discord botu | Sohbet botu |
+| [evaluation](./evaluation) | Değerlendirme/Benchmark | Model performans testi |
 
-## Quick Start
+## Hızlı Başlangıç / Quick Start
 
-1. Choose a template that fits your use case
-2. Copy the template directory to your project
-3. Install dependencies: `pip install -r requirements.txt`
-4. Configure your API key and endpoint
-5. Run: `python main.py`
+1. İhtiyacınıza uygun şablonu seçin
+2. Şablon dizinini projenize kopyalayın
+3. Bağımlılıkları yükleyin: `pip install -r requirements.txt`
+4. API anahtarınızı ve endpoint'inizi yapılandırın
+5. Çalıştırın: `python main.py`
 
-## Template Structure
-
-Each template follows a consistent structure:
+## Şablon Yapısı / Template Structure
 
 ```
 template-name/
-├── main.py           # Main application code
-├── requirements.txt  # Python dependencies
-├── README.md         # Template documentation
-└── .env.example      # Environment configuration (if applicable)
+├── main.py           # Ana uygulama kodu
+├── requirements.txt  # Python bağımlılıkları
+├── README.md         # Şablon dokümantasyonu
+└── .env.example      # Ortam değişkenleri (varsa)
 ```
 
-## Configuration
+## Yapılandırma / Configuration
 
-All templates use these common environment variables:
+Tüm şablonlar şu ortam değişkenlerini kullanır:
 
 ```bash
-API_BASE_URL=http://localhost:8000/v1  # For local deployment
+API_BASE_URL=http://localhost:8000/v1  # Yerel dağıtım için
 API_KEY=your-api-key-here
 MODEL_NAME=MiniMax-M2
 ```
 
-### Local Deployment
-Use with SGLang or vLLM deployment:
+### Yerel Dağıtım / Local Deployment
 ```bash
 API_BASE_URL=http://localhost:8000/v1
 ```
 
-### Cloud API
-Use MiniMax cloud service:
+### Bulut API / Cloud API
 ```bash
 API_BASE_URL=https://api.minimax.chat/v1
 ```
 
-## Template Descriptions
+## Şablon Açıklamaları / Template Descriptions
 
-### Basic API
-The simplest template for getting started. Demonstrates:
-- Creating an API client
-- Simple completions
-- Streaming responses
+### 🚀 Basic API
+Başlangıç için en basit şablon:
+- API istemcisi oluşturma
+- Basit tamamlamalar
+- Streaming yanıtlar
 
-### Tool-Calling Agent
-Build AI agents that can use tools. Features:
-- Tool/function definitions
-- Automatic tool execution
-- Multi-turn conversations
-- Extensible tool registry
+### 🤖 Tool-Calling Agent
+Araç kullanabilen AI ajanları:
+- Araç/fonksiyon tanımları
+- Otomatik araç çalıştırma
+- Çok turlu konuşmalar
+- Genişletilebilir araç kaydı
 
-### Coding Assistant
-A powerful coding helper. Capabilities:
-- Code analysis and review
-- Code generation
-- Bug fixing
-- Refactoring suggestions
-- Multi-language support
+### 💻 Coding Assistant
+Güçlü kodlama yardımcısı:
+- Kod analizi ve inceleme
+- Kod üretimi
+- Hata düzeltme
+- Refactoring önerileri
+- Çoklu dil desteği
 
-### Streaming Chat
-Real-time chat application. Features:
-- Token-by-token streaming
-- Multiple conversations
-- Thinking mode toggle
-- Rich terminal display
+### 💬 Streaming Chat
+Gerçek zamanlı sohbet uygulaması:
+- Token-token streaming
+- Çoklu konuşma
+- Düşünme modu toggle
+- Zengin terminal görüntüsü
 
-### Batch Processing
-Process many requests efficiently. Features:
-- Concurrent execution
-- Automatic retries
-- Progress tracking
-- JSON/CSV export
-- Statistics reporting
+### 📦 Batch Processing
+Verimli toplu istek işleme:
+- Eşzamanlı çalıştırma
+- Otomatik yeniden deneme
+- İlerleme takibi
+- JSON/CSV dışa aktarma
+- İstatistik raporlama
 
-## Requirements
+### 📚 RAG System
+Retrieval Augmented Generation:
+- Belge indeksleme
+- Semantik arama
+- Bağlamlı yanıtlar
+- Kaynak takibi
+
+### 🌐 FastAPI Server
+Production-ready REST API:
+- OpenAI uyumlu endpoints
+- Streaming desteği
+- Rate limiting
+- Docker desteği
+
+### 🔗 LangChain Integration
+LangChain framework entegrasyonu:
+- Prompt şablonları
+- Hafıza yönetimi
+- Zincir bileşimi
+- Agent desteği
+
+### 🎮 Discord Bot
+Discord sohbet botu:
+- Slash komutları
+- Kod işlemleri
+- Kullanıcı bazlı geçmiş
+- Mention yanıtı
+
+### 📊 Evaluation
+Model değerlendirme araçları:
+- Özel test setleri
+- Çeşitli metrikler
+- Performans ölçümü
+- Görsel raporlar
+
+## Gereksinimler / Requirements
 
 - Python 3.9+
 - OpenAI SDK (`pip install openai`)
-- Template-specific dependencies (see individual requirements.txt)
+- Şablona özel bağımlılıklar (her requirements.txt'e bakın)
 
-## MiniMax-M2 Highlights
+## MiniMax-M2 Özellikleri / MiniMax-M2 Highlights
 
-These templates leverage MiniMax-M2's strengths:
+Bu şablonlar MiniMax-M2'nin güçlü yönlerinden yararlanır:
 
-- **Coding Excellence**: #1 on SWE-bench (69.4%) and LiveCodeBench (83%)
-- **Agentic Workflows**: Complex tool use with graceful error recovery
-- **Efficiency**: Only 10B active parameters for fast inference
-- **Thinking Mode**: Extended reasoning with `<think>` tags
+- **Kod Mükemmelliği**: SWE-bench'te #1 (%69.4) ve LiveCodeBench (%83)
+- **Agentic İş Akışları**: Hata kurtarma ile karmaşık araç kullanımı
+- **Verimlilik**: Hızlı çıkarım için sadece 10B aktif parametre
+- **Düşünme Modu**: `<think>` etiketleri ile genişletilmiş muhakeme
 
-## Contributing
+## Katkıda Bulunma / Contributing
 
-To add a new template:
+Yeni şablon eklemek için:
 
-1. Create a new directory under `templates/`
-2. Include `main.py`, `requirements.txt`, and `README.md`
-3. Follow the existing template patterns
-4. Submit a pull request
+1. `templates/` altında yeni dizin oluşturun
+2. `main.py`, `requirements.txt` ve `README.md` ekleyin
+3. Mevcut şablon kalıplarını takip edin
+4. Pull request gönderin
 
-## Resources
+## Kaynaklar / Resources
 
-- [MiniMax-M2 Documentation](../README.md)
-- [Tool Calling Guide](../docs/tool_calling_guide.md)
-- [Deployment Guides](../docs/)
-- [MiniMax Platform](https://platform.minimax.io/)
+- [MiniMax-M2 Dokümantasyonu](../README.md)
+- [Tool Calling Kılavuzu](../docs/tool_calling_guide.md)
+- [Dağıtım Kılavuzları](../docs/)
+- [MiniMax Platformu](https://platform.minimax.io/)
