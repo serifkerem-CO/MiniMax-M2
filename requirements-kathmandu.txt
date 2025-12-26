@@ -1,0 +1,32 @@
+# 🛕 Kathmandu Engine Dependencies
+# =================================
+
+# Core (Required)
+# ---------------
+# Standart kütüphane kullanılıyor, ek bağımlılık yok
+
+# API Server (Optional)
+# ---------------------
+fastapi>=0.100.0
+uvicorn>=0.23.0
+websockets>=11.0
+
+# LLM Entegrasyonları (Optional)
+# ------------------------------
+# openai>=1.0.0        # GPT entegrasyonu için
+# anthropic>=0.5.0     # Claude entegrasyonu için
+# google-generativeai  # Gemini entegrasyonu için
+
+# Veri İşleme (Optional)
+# ----------------------
+# pandas>=2.0.0
+# numpy>=1.24.0
+
+# N8N Entegrasyonu (Optional)
+# ---------------------------
+# httpx>=0.24.0        # N8N webhook'ları için
+
+# Development
+# -----------
+# pytest>=7.0.0
+# pytest-asyncio>=0.21.0
