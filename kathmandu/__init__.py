@@ -19,7 +19,7 @@ XDATUM & CAZIBE.IO için tasarlandı.
 __version__ = "1.0.0"
 __codename__ = "STUPA"
 
-from .stupa import DataStupa
+from .stupa import DataStupa, enlighten
 from .layers import (
     ToprakLayer,
     SuLayer,
@@ -32,6 +32,7 @@ from .prayer_wheel import PrayerWheel
 
 __all__ = [
     "DataStupa",
+    "enlighten",
     "ToprakLayer",
     "SuLayer",
     "AtesLayer",
