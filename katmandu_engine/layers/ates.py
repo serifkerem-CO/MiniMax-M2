@@ -8,6 +8,15 @@ N8N "Prayer Wheels" (Dua Carklari) doner.
 7 LLM (Claude, GPT, Gemini, Mistral...) cember olur.
 Her biri veriyi bir kez "katlar".
 
+GERCEK API ENTEGRASYONU:
+    - Claude (Anthropic) -> Etik boyutu
+    - GPT (OpenAI) -> Yaraticilik boyutu
+    - Gemini (Google) -> Analiz boyutu
+    - Mistral -> Lojistik boyutu
+    - DeepSeek -> Kod boyutu
+    - Llama (Together/Groq) -> Bilgelik boyutu
+    - MiniMax -> Sentez boyutu
+
 Aktorler: ADVANCED MIND (333 Persona)
 Rituel: VOTING MANTRAS - Bilgi yanar, piser, celiklesir.
 Kod Adi: ALCHEMICAL_FORGE
@@ -23,6 +32,16 @@ from typing import Any, Optional, Callable
 import json
 
 from .su import PurifiedDataPacket
+
+# LLM Provider importlari
+try:
+    from ..llm_providers import (
+        LLMCouncil, CouncilVote, create_council,
+        ProviderType, LLMProvider
+    )
+    LLM_PROVIDERS_AVAILABLE = True
+except ImportError:
+    LLM_PROVIDERS_AVAILABLE = False
 
 
 class MonkDimension(Enum):
@@ -44,6 +63,8 @@ class MonkVote:
     fold_result: str              # Katlama sonucu
     confidence: float             # Guven skoru (0-1)
     reasoning: str                # Mantik yurütme
+    latency_ms: float = 0.0       # API gecikme suresi
+    is_real_api: bool = False     # Gercek API mi mock mu?
     timestamp: datetime = field(default_factory=datetime.now)
 
     def to_dict(self) -> dict:
@@ -53,6 +74,8 @@ class MonkVote:
             "fold_result": self.fold_result,
             "confidence": self.confidence,
             "reasoning": self.reasoning,
+            "latency_ms": self.latency_ms,
+            "is_real_api": self.is_real_api,
             "timestamp": self.timestamp.isoformat()
         }
 
@@ -66,6 +89,7 @@ class ForgedWisdom:
     consensus_confidence: float
     fold_count: int
     forging_duration_ms: float
+    real_api_count: int = 0       # Kac tane gercek API kullanildi
     timestamp: datetime = field(default_factory=datetime.now)
 
     def to_dict(self) -> dict:
@@ -76,6 +100,7 @@ class ForgedWisdom:
             "consensus_confidence": self.consensus_confidence,
             "fold_count": self.fold_count,
             "forging_duration_ms": self.forging_duration_ms,
+            "real_api_count": self.real_api_count,
             "timestamp": self.timestamp.isoformat()
         }
 
@@ -94,219 +119,272 @@ class Monk(ABC):
         pass
 
 
-class ClaudeMonk(Monk):
-    """Claude Rahibi - Etik Boyutu"""
+class RealLLMMonk(Monk):
+    """
+    Gercek LLM API Kullanan Rahip
 
-    def __init__(self):
-        super().__init__("Claude", MonkDimension.ETHICS)
+    LLM Provider'lari kullanarak gercek API cagrilari yapar.
+    """
+
+    DIMENSION_PROMPTS = {
+        MonkDimension.ETHICS: """Sen bir etik ve guvenlik uzmanisin.
+Verilen icerigi etik acisindan degerlendir:
+- Potansiyel zararlar
+- Gizlilik endisleri
+- Toplumsal etki
+Kisa ve oz bir degerlendirme yap.""",
+
+        MonkDimension.CREATIVITY: """Sen yaratici bir dusunur sun.
+Verilen icerigi yaratici acisindan incele:
+- Alternatif bakis acilari
+- Yenilikci fikirler
+- Ilham verici noktalar
+Kisa ve oz bir degerlendirme yap.""",
+
+        MonkDimension.ANALYSIS: """Sen bir analiz uzmanisin.
+Verilen icerigi derinlemesine analiz et:
+- Ana temalar
+- Oruntuler
+- Kritik noktalar
+Kisa ve oz bir degerlendirme yap.""",
+
+        MonkDimension.LOGIC: """Sen bir yapi ve lojistik uzmanisin.
+Verilen icerigin yapisini incele:
+- Mantiksal tutarlilik
+- Akis ve baglantilar
+- Optimizasyon noktalari
+Kisa ve oz bir degerlendirme yap.""",
+
+        MonkDimension.CODE: """Sen bir teknik ve kod uzmanisin.
+Verilen icerigi teknik acisindan incele:
+- Teknik fizibilite
+- Implementasyon onerileri
+- Potansiyel zorluklar
+Kisa ve oz bir degerlendirme yap.""",
+
+        MonkDimension.WISDOM: """Sen bir bilge ve danismansin.
+Verilen icerigi butunsel perspektiften degerlendir:
+- Uzun vadeli etkiler
+- Tarihsel baglam
+- Derin icgoruler
+Kisa ve oz bir degerlendirme yap.""",
+
+        MonkDimension.SYNTHESIS: """Sen bir sentez uzmanisin.
+Verilen icerigi ve onceki degerlendirmeleri sentezle:
+- Ortak noktalar
+- Celiskiler
+- Bütünsel sonuc
+Kisa ve oz bir degerlendirme yap."""
+    }
+
+    PROVIDER_DIMENSION_MAP = {
+        ProviderType.CLAUDE: MonkDimension.ETHICS,
+        ProviderType.OPENAI: MonkDimension.CREATIVITY,
+        ProviderType.GEMINI: MonkDimension.ANALYSIS,
+        ProviderType.MISTRAL: MonkDimension.LOGIC,
+        ProviderType.DEEPSEEK: MonkDimension.CODE,
+        ProviderType.LLAMA: MonkDimension.WISDOM,
+        ProviderType.MINIMAX: MonkDimension.SYNTHESIS
+    }
+
+    def __init__(self, provider: LLMProvider, provider_type: ProviderType):
+        dimension = self.PROVIDER_DIMENSION_MAP.get(provider_type, MonkDimension.SYNTHESIS)
+        super().__init__(provider_type.value.capitalize(), dimension)
+        self.provider = provider
+        self.provider_type = provider_type
 
     async def fold(self, content: Any, context: dict) -> MonkVote:
-        await asyncio.sleep(0.1)  # Dusunce suresi
+        """Gercek LLM API ile katlama"""
         self.total_folds += 1
 
-        # Etik analizi simülasyonu
-        ethical_concerns = []
-        content_str = str(content).lower()
+        # Onceki oylar varsa context'e ekle
+        previous_context = ""
+        if context.get("previous_votes"):
+            previous_context = "\n\nOnceki degerlendirmeler:\n"
+            for vote in context["previous_votes"][-3:]:  # Son 3 oy
+                previous_context += f"- [{vote.dimension.value}]: {vote.fold_result[:100]}...\n"
 
-        if any(w in content_str for w in ["gizli", "ozel", "kisisel"]):
-            ethical_concerns.append("Gizlilik endisesi")
-        if any(w in content_str for w in ["zarar", "tehlike", "risk"]):
-            ethical_concerns.append("Potansiyel zarar")
+        system_prompt = self.DIMENSION_PROMPTS.get(self.dimension, "Icerigi analiz et.")
+        user_prompt = f"""Icerik:
+{str(content)[:2000]}
+{previous_context}
 
-        confidence = 0.9 if not ethical_concerns else 0.7
-        reasoning = f"Etik tarama tamamlandi. {len(ethical_concerns)} enside tespit edildi."
+Lutfen {self.dimension.value} boyutundan kisa bir degerlendirme yap.
+Yanitinin sonuna guven seviyeni 0-100 arasi belirt: [GUVEN: XX]"""
+
+        response = await self.provider.generate(
+            prompt=user_prompt,
+            system_prompt=system_prompt
+        )
+
+        # Guven skorunu cikar
+        confidence = 0.75
+        result_content = response.content
+        if "[GUVEN:" in result_content.upper():
+            try:
+                import re
+                match = re.search(r'\[GUVEN:\s*(\d+)\]', result_content, re.IGNORECASE)
+                if match:
+                    confidence = int(match.group(1)) / 100
+                    result_content = re.sub(r'\[GUVEN:\s*\d+\]', '', result_content, flags=re.IGNORECASE).strip()
+            except:
+                pass
+
+        if not response.success:
+            confidence = 0.0
+            result_content = f"API hatasi: {response.error}"
 
         return MonkVote(
             monk_name=self.name,
             dimension=self.dimension,
-            fold_result=f"Etik_Katlanmis_{content_str[:50]}",
+            fold_result=result_content[:500],
             confidence=confidence,
-            reasoning=reasoning
+            reasoning=f"{self.dimension.value} boyutundan gercek API degerlendirmesi",
+            latency_ms=response.latency_ms,
+            is_real_api=True
         )
 
 
-class MistralMonk(Monk):
-    """Mistral Rahibi - Lojistik Boyutu"""
+class MockMonk(Monk):
+    """
+    Mock Rahip - API yokken kullanilir
 
-    def __init__(self):
-        super().__init__("Mistral", MonkDimension.LOGIC)
+    Simule edilmis yanitlar uretir.
+    """
+
+    def __init__(self, name: str, dimension: MonkDimension):
+        super().__init__(name, dimension)
 
     async def fold(self, content: Any, context: dict) -> MonkVote:
-        await asyncio.sleep(0.08)
+        """Simule edilmis katlama"""
+        await asyncio.sleep(0.05 + random.random() * 0.1)
         self.total_folds += 1
 
-        # Lojistik analizi
-        structure_score = 0.85 if isinstance(content, dict) else 0.75
+        content_str = str(content)[:100]
+        confidence = 0.7 + random.random() * 0.25
+
+        mock_results = {
+            MonkDimension.ETHICS: f"Etik degerlendirme: Icerik genel olarak uygun gorunuyor.",
+            MonkDimension.CREATIVITY: f"Yaratici bakis: Alternatif yaklasimlar mevcut.",
+            MonkDimension.ANALYSIS: f"Analiz: Temel oruntular tespit edildi.",
+            MonkDimension.LOGIC: f"Lojistik: Yapi tutarli gorunuyor.",
+            MonkDimension.CODE: f"Teknik: Implementasyon mumkun.",
+            MonkDimension.WISDOM: f"Bilgelik: Uzun vadeli perspektif olumlu.",
+            MonkDimension.SYNTHESIS: f"Sentez: Boyutlar arasi uyum saglanabilir."
+        }
 
         return MonkVote(
             monk_name=self.name,
             dimension=self.dimension,
-            fold_result=f"Lojistik_Katlanmis_{str(content)[:50]}",
-            confidence=structure_score,
-            reasoning="Yapi ve akis analizi tamamlandi."
-        )
-
-
-class DeepSeekMonk(Monk):
-    """DeepSeek Rahibi - Kod Boyutu"""
-
-    def __init__(self):
-        super().__init__("DeepSeek", MonkDimension.CODE)
-
-    async def fold(self, content: Any, context: dict) -> MonkVote:
-        await asyncio.sleep(0.12)
-        self.total_folds += 1
-
-        # Kod/teknik analizi
-        has_technical = any(
-            w in str(content).lower()
-            for w in ["api", "veri", "sistem", "kod", "fonksiyon"]
-        )
-
-        return MonkVote(
-            monk_name=self.name,
-            dimension=self.dimension,
-            fold_result=f"Kod_Katlanmis_{str(content)[:50]}",
-            confidence=0.92 if has_technical else 0.78,
-            reasoning="Teknik yapi ve kod potansiyeli analiz edildi."
-        )
-
-
-class GeminiMonk(Monk):
-    """Gemini Rahibi - Analiz Boyutu"""
-
-    def __init__(self):
-        super().__init__("Gemini", MonkDimension.ANALYSIS)
-
-    async def fold(self, content: Any, context: dict) -> MonkVote:
-        await asyncio.sleep(0.09)
-        self.total_folds += 1
-
-        # Coklu kaynak analizi
-        content_len = len(str(content))
-        depth_score = min(0.95, 0.6 + (content_len / 1000))
-
-        return MonkVote(
-            monk_name=self.name,
-            dimension=self.dimension,
-            fold_result=f"Analiz_Katlanmis_{str(content)[:50]}",
-            confidence=depth_score,
-            reasoning="Derinlemesine analiz ve coklu boyut taramasi tamamlandi."
-        )
-
-
-class LlamaMonk(Monk):
-    """Llama Rahibi - Bilgelik Boyutu"""
-
-    def __init__(self):
-        super().__init__("Llama", MonkDimension.WISDOM)
-
-    async def fold(self, content: Any, context: dict) -> MonkVote:
-        await asyncio.sleep(0.07)
-        self.total_folds += 1
-
-        return MonkVote(
-            monk_name=self.name,
-            dimension=self.dimension,
-            fold_result=f"Bilge_Katlanmis_{str(content)[:50]}",
-            confidence=0.88,
-            reasoning="Bütünsel perspektiften bilgelik cıkarıldı."
-        )
-
-
-class GPTMonk(Monk):
-    """GPT Rahibi - Yaraticilik Boyutu"""
-
-    def __init__(self):
-        super().__init__("GPT", MonkDimension.CREATIVITY)
-
-    async def fold(self, content: Any, context: dict) -> MonkVote:
-        await asyncio.sleep(0.1)
-        self.total_folds += 1
-
-        return MonkVote(
-            monk_name=self.name,
-            dimension=self.dimension,
-            fold_result=f"Yaratici_Katlanmis_{str(content)[:50]}",
-            confidence=0.85,
-            reasoning="Yaratici potansiyel ve alternatif bakis acilari kesfedildi."
-        )
-
-
-class MiniMaxMonk(Monk):
-    """MiniMax Rahibi - Sentez Boyutu"""
-
-    def __init__(self):
-        super().__init__("MiniMax", MonkDimension.SYNTHESIS)
-
-    async def fold(self, content: Any, context: dict) -> MonkVote:
-        await asyncio.sleep(0.11)
-        self.total_folds += 1
-
-        # Diger oylari sentezle (context'ten)
-        other_votes = context.get("previous_votes", [])
-        synthesis_confidence = 0.9 if len(other_votes) >= 3 else 0.75
-
-        return MonkVote(
-            monk_name=self.name,
-            dimension=self.dimension,
-            fold_result=f"Sentez_Katlanmis_{str(content)[:50]}",
-            confidence=synthesis_confidence,
-            reasoning=f"{len(other_votes)} farkli boyut sentezlendi."
+            fold_result=mock_results.get(self.dimension, "Mock degerlendirme"),
+            confidence=confidence,
+            reasoning=f"Mock {self.dimension.value} boyutu degerlendirmesi",
+            latency_ms=50 + random.random() * 100,
+            is_real_api=False
         )
 
 
 class PrayerWheel:
     """
-    Dua Carki - N8N Workflow Simulasyonu
-    Rahibler cember kurar, her biri veriyi bir kez katlar
+    Dua Carki - LLM Konseyi Orkestratoru
+
+    Gercek LLM API'leri veya mock rahiplerle calisir.
     """
 
-    def __init__(self, wheel_id: str):
+    def __init__(self, wheel_id: str, use_real_api: bool = True):
         self.wheel_id = wheel_id
         self.spins = 0
-        self.monks: list[Monk] = [
-            ClaudeMonk(),
-            MistralMonk(),
-            DeepSeekMonk(),
-            GeminiMonk(),
-            LlamaMonk(),
-            GPTMonk(),
-            MiniMaxMonk()
+        self.use_real_api = use_real_api
+        self.monks: list[Monk] = []
+        self.council: Optional[LLMCouncil] = None
+        self._initialize_monks()
+
+    def _initialize_monks(self):
+        """Rahipleri baslat - gercek veya mock"""
+        if self.use_real_api and LLM_PROVIDERS_AVAILABLE:
+            try:
+                self.council = create_council(use_mock=True)
+
+                # Her provider icin RealLLMMonk olustur
+                for ptype, provider in self.council.providers.items():
+                    monk = RealLLMMonk(provider, ptype)
+                    self.monks.append(monk)
+
+                print(f"   [WHEEL-{self.wheel_id}] {len(self.monks)} gercek rahip hazir")
+            except Exception as e:
+                print(f"   [WHEEL-{self.wheel_id}] LLM Council hatasi: {e}, mock'a geciliyor")
+                self._create_mock_monks()
+        else:
+            self._create_mock_monks()
+
+    def _create_mock_monks(self):
+        """Mock rahipler olustur"""
+        self.monks = [
+            MockMonk("Claude", MonkDimension.ETHICS),
+            MockMonk("GPT", MonkDimension.CREATIVITY),
+            MockMonk("Gemini", MonkDimension.ANALYSIS),
+            MockMonk("Mistral", MonkDimension.LOGIC),
+            MockMonk("DeepSeek", MonkDimension.CODE),
+            MockMonk("Llama", MonkDimension.WISDOM),
+            MockMonk("MiniMax", MonkDimension.SYNTHESIS)
         ]
+        print(f"   [WHEEL-{self.wheel_id}] 7 mock rahip hazir")
 
     async def spin(
         self,
         content: Any,
         monk_count: int = 3,
-        consensus_threshold: float = 0.7
+        consensus_threshold: float = 0.7,
+        parallel: bool = True
     ) -> ForgedWisdom:
         """
         Carki Dondur - Voting Mantras
+
+        Args:
+            content: Islenecek icerik
+            monk_count: Kac rahip katilacak
+            consensus_threshold: Konsensus esigi
+            parallel: Paralel mi seri mi calisacak
         """
         start_time = datetime.now()
         self.spins += 1
 
-        # Rastgele rahip sec (veya hepsini kullan)
+        # Rahip sec
         selected_monks = random.sample(self.monks, min(monk_count, len(self.monks)))
 
         votes = []
         context = {"previous_votes": []}
 
-        # Sirayla (veya paralel) katlama
-        for monk in selected_monks:
-            vote = await monk.fold(content, context)
-            votes.append(vote)
-            context["previous_votes"].append(vote)
-            print(f"   Rahip {monk.name} veriyi katladi... ({monk.dimension.value})")
+        if parallel:
+            # Paralel calistir
+            tasks = [monk.fold(content, context) for monk in selected_monks]
+            votes = await asyncio.gather(*tasks)
+            for vote in votes:
+                context["previous_votes"].append(vote)
+                print(f"   Rahip {vote.monk_name} veriyi katladi ({vote.dimension.value}) "
+                      f"[{'API' if vote.is_real_api else 'Mock'}]")
+        else:
+            # Sirayla calistir
+            for monk in selected_monks:
+                vote = await monk.fold(content, context)
+                votes.append(vote)
+                context["previous_votes"].append(vote)
+                print(f"   Rahip {monk.name} veriyi katladi ({monk.dimension.value}) "
+                      f"[{'API' if vote.is_real_api else 'Mock'}]")
 
         # Konsensus hesapla
-        avg_confidence = sum(v.confidence for v in votes) / len(votes)
-        consensus_reached = avg_confidence >= consensus_threshold
+        successful_votes = [v for v in votes if v.confidence > 0]
+        if successful_votes:
+            avg_confidence = sum(v.confidence for v in successful_votes) / len(successful_votes)
+        else:
+            avg_confidence = 0.0
 
-        # Katlanmis sonuclari birlestir
-        fold_results = [v.fold_result for v in votes]
-        consensus_result = f"Celiklestirilmis_{'|'.join([m.name for m in selected_monks])}"
+        # Sentez sonucu
+        consensus_parts = [v.fold_result[:100] for v in successful_votes[:3]]
+        consensus_result = " | ".join(consensus_parts) if consensus_parts else "Konsensus saglanamadi"
+
+        # Gercek API sayisi
+        real_api_count = len([v for v in votes if v.is_real_api])
 
         duration_ms = (datetime.now() - start_time).total_seconds() * 1000
 
@@ -316,7 +394,8 @@ class PrayerWheel:
             consensus_result=consensus_result,
             consensus_confidence=avg_confidence,
             fold_count=len(votes),
-            forging_duration_ms=duration_ms
+            forging_duration_ms=duration_ms,
+            real_api_count=real_api_count
         )
 
 
@@ -326,6 +405,10 @@ class AtesLayer:
 
     Gorev: Bilgiyi yakmak, pisirmek, celiklestirmek
     Frekans: Atesin frekansi - 528Hz (Donusum)
+
+    GERCEK API DESTEGI:
+        - use_real_api=True: Gercek LLM API'leri kullanir
+        - use_real_api=False: Mock rahiplerle calisir
     """
 
     LAYER_NAME = "ATES"
@@ -333,12 +416,17 @@ class AtesLayer:
     LAYER_CODE = "ALCHEMICAL_FORGE"
     FREQUENCY_HZ = 528.0  # DNA Onarim / Donusum Frekansi
 
-    def __init__(self, wheel_count: int = 7):
+    def __init__(self, wheel_count: int = 7, use_real_api: bool = True):
+        self.use_real_api = use_real_api
         self.prayer_wheels = [
-            PrayerWheel(f"wheel_{i}") for i in range(wheel_count)
+            PrayerWheel(f"wheel_{i}", use_real_api=use_real_api)
+            for i in range(wheel_count)
         ]
         self.forged_items: list[ForgedWisdom] = []
         self.active_persona_count = 333  # ADVANCED MIND personas
+
+        mode = "GERCEK API" if use_real_api else "MOCK"
+        print(f"   [ATES] {wheel_count} dua carki hazir ({mode} modu)")
 
     def _select_wheel(self) -> PrayerWheel:
         """En az kullanilan carki sec"""
@@ -347,11 +435,16 @@ class AtesLayer:
     async def forge(
         self,
         purified_packet: PurifiedDataPacket,
-        intensity: int = 3
+        intensity: int = 3,
+        parallel: bool = True
     ) -> ForgedWisdom:
         """
         Simya Dovumu
-        intensity: Kac rahip katılacak (1-7)
+
+        Args:
+            purified_packet: Arindirilmis veri paketi
+            intensity: Kac rahip katilacak (1-7)
+            parallel: Paralel API cagrilari yap
         """
         wheel = self._select_wheel()
 
@@ -359,7 +452,8 @@ class AtesLayer:
 
         wisdom = await wheel.spin(
             content=purified_packet.purified_content,
-            monk_count=min(7, max(1, intensity))
+            monk_count=min(7, max(1, intensity)),
+            parallel=parallel
         )
 
         self.forged_items.append(wisdom)
@@ -386,19 +480,24 @@ class AtesLayer:
             max(1, len(self.forged_items))
         )
 
+        # Toplam gercek API kullanimi
+        total_real_api = sum(f.real_api_count for f in self.forged_items)
+
         monk_stats = {}
         for wheel in self.prayer_wheels:
             for monk in wheel.monks:
                 if monk.name not in monk_stats:
-                    monk_stats[monk.name] = 0
-                monk_stats[monk.name] += monk.total_folds
+                    monk_stats[monk.name] = {"folds": 0, "is_real": isinstance(monk, RealLLMMonk)}
+                monk_stats[monk.name]["folds"] += monk.total_folds
 
         return {
             "layer": self.LAYER_NAME,
             "code": self.LAYER_CODE,
             "frequency_hz": self.FREQUENCY_HZ,
+            "mode": "real_api" if self.use_real_api else "mock",
             "total_forged": len(self.forged_items),
             "total_wheel_spins": total_spins,
+            "total_real_api_calls": total_real_api,
             "average_confidence": round(avg_confidence, 4),
             "average_forge_duration_ms": round(avg_duration, 2),
             "monk_contributions": monk_stats,
@@ -406,16 +505,24 @@ class AtesLayer:
         }
 
     def __repr__(self):
-        return f"<AtesLayer: {len(self.forged_items)} forged, {len(self.prayer_wheels)} wheels>"
+        mode = "real" if self.use_real_api else "mock"
+        return f"<AtesLayer: {len(self.forged_items)} forged, {len(self.prayer_wheels)} wheels, {mode} mode>"
 
 
 # Rituel Fonksiyonlari
-async def forge_ritual(purified_packets: list[PurifiedDataPacket]) -> list[ForgedWisdom]:
+async def forge_ritual(
+    purified_packets: list[PurifiedDataPacket],
+    use_real_api: bool = True
+) -> list[ForgedWisdom]:
     """
     ATES RITUELI
     Dua carklari doner, bilgi yanar ve celiklenir
+
+    Args:
+        purified_packets: Arindirilmis veri paketleri
+        use_real_api: Gercek LLM API'leri kullan
     """
-    layer = AtesLayer()
+    layer = AtesLayer(use_real_api=use_real_api)
 
     print(f"Tapinak Avlusu aciliyor... {len(purified_packets)} paket bekliyor")
     print(f"[ATES] N8N Dua Carklari donuyor... 7 LLM Konseyi toplaniyor...")
@@ -426,6 +533,7 @@ async def forge_ritual(purified_packets: list[PurifiedDataPacket]) -> list[Forge
     print(f"  Dovum tamamlandi:")
     print(f"    - {stats['total_forged']} bilge sonuc uretildi")
     print(f"    - Ortalama guven: %{stats['average_confidence']*100:.1f}")
+    print(f"    - Gercek API cagrilari: {stats['total_real_api_calls']}")
     print(f"    - Rahip katkilari: {stats['monk_contributions']}")
 
     return forged
