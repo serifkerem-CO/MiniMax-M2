@@ -1,162 +1,139 @@
 # MiniMax-M2 Proje Şablonları / Project Templates
 
-MiniMax-M2 ile hızlıca başlamak için kullanıma hazır proje şablonları.
+MiniMax-M2 ile hızlıca başlamak için kullanıma hazır **17 proje şablonu**.
 
-Ready-to-use project templates to quickly get started with MiniMax-M2.
+Ready-to-use **17 project templates** to quickly get started with MiniMax-M2.
 
 ## Mevcut Şablonlar / Available Templates
 
-| Şablon | Açıklama | Kullanım Alanı |
-|--------|----------|----------------|
-| [basic-api](./basic-api) | Basit API etkileşimi | Başlangıç, temel sorgular |
-| [tool-calling-agent](./tool-calling-agent) | Fonksiyon çağırmalı ajan | Agentic iş akışları, otomasyon |
-| [coding-assistant](./coding-assistant) | Kod analizi ve üretimi | Geliştirme yardımı |
-| [streaming-chat](./streaming-chat) | Gerçek zamanlı sohbet | İnteraktif uygulamalar |
-| [batch-processing](./batch-processing) | Toplu istek işleme | Veri işleme, değerlendirme |
-| [rag-system](./rag-system) | RAG sistemi | Belge tabanlı soru-cevap |
-| [fastapi-server](./fastapi-server) | REST API sunucusu | Web servisleri, API |
-| [langchain-integration](./langchain-integration) | LangChain entegrasyonu | Framework kullanımı |
+### 🚀 Temel Şablonlar / Core Templates
+
+| Şablon | Açıklama | Kullanım |
+|--------|----------|----------|
+| [basic-api](./basic-api) | Basit API etkileşimi | Başlangıç |
+| [streaming-chat](./streaming-chat) | Gerçek zamanlı sohbet | Chat uygulamaları |
+| [batch-processing](./batch-processing) | Toplu istek işleme | Veri işleme |
+
+### 🤖 Ajan Şablonları / Agent Templates
+
+| Şablon | Açıklama | Kullanım |
+|--------|----------|----------|
+| [tool-calling-agent](./tool-calling-agent) | Fonksiyon çağırmalı ajan | Otomasyon |
+| [multi-agent](./multi-agent) | Çoklu ajan sistemi | Karmaşık görevler |
+| [coding-assistant](./coding-assistant) | Kod asistanı | Geliştirme |
+
+### 🌐 Web & API Şablonları
+
+| Şablon | Açıklama | Kullanım |
+|--------|----------|----------|
+| [fastapi-server](./fastapi-server) | REST API sunucusu | Web servisi |
+| [gradio-ui](./gradio-ui) | Web arayüzü | Demo & prototip |
+
+### 💬 Bot Şablonları
+
+| Şablon | Açıklama | Kullanım |
+|--------|----------|----------|
 | [discord-bot](./discord-bot) | Discord botu | Sohbet botu |
-| [evaluation](./evaluation) | Değerlendirme/Benchmark | Model performans testi |
+| [telegram-bot](./telegram-bot) | Telegram botu | Mesajlaşma |
+
+### 🔧 Araç Şablonları / Tool Templates
+
+| Şablon | Açıklama | Kullanım |
+|--------|----------|----------|
+| [cli-tool](./cli-tool) | Komut satırı aracı | Terminal |
+| [rag-system](./rag-system) | RAG sistemi | Belge sorgulama |
+| [document-summarizer](./document-summarizer) | Belge özetleme | Özetleme |
+| [translation-service](./translation-service) | Çeviri servisi | Çeviri |
+| [evaluation](./evaluation) | Benchmark aracı | Test & değerlendirme |
+
+### 📚 Entegrasyonlar / Integrations
+
+| Şablon | Açıklama | Kullanım |
+|--------|----------|----------|
+| [langchain-integration](./langchain-integration) | LangChain | Framework |
+| [jupyter-notebooks](./jupyter-notebooks) | Jupyter örnekleri | Öğrenme |
 
 ## Hızlı Başlangıç / Quick Start
 
-1. İhtiyacınıza uygun şablonu seçin
-2. Şablon dizinini projenize kopyalayın
-3. Bağımlılıkları yükleyin: `pip install -r requirements.txt`
-4. API anahtarınızı ve endpoint'inizi yapılandırın
-5. Çalıştırın: `python main.py`
+```bash
+# 1. Şablon dizinine git
+cd templates/basic-api
+
+# 2. Bağımlılıkları yükle
+pip install -r requirements.txt
+
+# 3. API anahtarını ayarla
+export MINIMAX_API_KEY="your-api-key"
+
+# 4. Çalıştır
+python main.py
+```
 
 ## Şablon Yapısı / Template Structure
 
 ```
 template-name/
-├── main.py           # Ana uygulama kodu
-├── requirements.txt  # Python bağımlılıkları
-├── README.md         # Şablon dokümantasyonu
+├── main.py           # Ana kod
+├── requirements.txt  # Bağımlılıklar
+├── README.md         # Dokümantasyon
 └── .env.example      # Ortam değişkenleri (varsa)
 ```
 
 ## Yapılandırma / Configuration
 
-Tüm şablonlar şu ortam değişkenlerini kullanır:
-
 ```bash
-API_BASE_URL=http://localhost:8000/v1  # Yerel dağıtım için
-API_KEY=your-api-key-here
-MODEL_NAME=MiniMax-M2
+# Yerel dağıtım
+export MINIMAX_API_BASE="http://localhost:8000/v1"
+export MINIMAX_API_KEY="your-api-key"
+export MINIMAX_MODEL="MiniMax-M2"
+
+# Bulut API
+export MINIMAX_API_BASE="https://api.minimax.chat/v1"
 ```
 
-### Yerel Dağıtım / Local Deployment
-```bash
-API_BASE_URL=http://localhost:8000/v1
-```
+## Kategorilere Göre Seçim / Choose by Category
 
-### Bulut API / Cloud API
-```bash
-API_BASE_URL=https://api.minimax.chat/v1
-```
+### Yeni Başlayanlar İçin
+1. `basic-api` - API kullanımını öğren
+2. `jupyter-notebooks` - İnteraktif öğrenme
+3. `streaming-chat` - Sohbet uygulaması
 
-## Şablon Açıklamaları / Template Descriptions
+### Uygulama Geliştirmek İçin
+1. `fastapi-server` - Web API
+2. `gradio-ui` - Web arayüzü
+3. `discord-bot` veya `telegram-bot` - Bot
 
-### 🚀 Basic API
-Başlangıç için en basit şablon:
-- API istemcisi oluşturma
-- Basit tamamlamalar
-- Streaming yanıtlar
+### İleri Düzey Kullanım
+1. `tool-calling-agent` - Araç kullanımı
+2. `multi-agent` - Çoklu ajan
+3. `rag-system` - Belge tabanlı AI
 
-### 🤖 Tool-Calling Agent
-Araç kullanabilen AI ajanları:
-- Araç/fonksiyon tanımları
-- Otomatik araç çalıştırma
-- Çok turlu konuşmalar
-- Genişletilebilir araç kaydı
+### Özel Görevler
+1. `document-summarizer` - Özetleme
+2. `translation-service` - Çeviri
+3. `coding-assistant` - Kod yazma
 
-### 💻 Coding Assistant
-Güçlü kodlama yardımcısı:
-- Kod analizi ve inceleme
-- Kod üretimi
-- Hata düzeltme
-- Refactoring önerileri
-- Çoklu dil desteği
-
-### 💬 Streaming Chat
-Gerçek zamanlı sohbet uygulaması:
-- Token-token streaming
-- Çoklu konuşma
-- Düşünme modu toggle
-- Zengin terminal görüntüsü
-
-### 📦 Batch Processing
-Verimli toplu istek işleme:
-- Eşzamanlı çalıştırma
-- Otomatik yeniden deneme
-- İlerleme takibi
-- JSON/CSV dışa aktarma
-- İstatistik raporlama
-
-### 📚 RAG System
-Retrieval Augmented Generation:
-- Belge indeksleme
-- Semantik arama
-- Bağlamlı yanıtlar
-- Kaynak takibi
-
-### 🌐 FastAPI Server
-Production-ready REST API:
-- OpenAI uyumlu endpoints
-- Streaming desteği
-- Rate limiting
-- Docker desteği
-
-### 🔗 LangChain Integration
-LangChain framework entegrasyonu:
-- Prompt şablonları
-- Hafıza yönetimi
-- Zincir bileşimi
-- Agent desteği
-
-### 🎮 Discord Bot
-Discord sohbet botu:
-- Slash komutları
-- Kod işlemleri
-- Kullanıcı bazlı geçmiş
-- Mention yanıtı
-
-### 📊 Evaluation
-Model değerlendirme araçları:
-- Özel test setleri
-- Çeşitli metrikler
-- Performans ölçümü
-- Görsel raporlar
-
-## Gereksinimler / Requirements
-
-- Python 3.9+
-- OpenAI SDK (`pip install openai`)
-- Şablona özel bağımlılıklar (her requirements.txt'e bakın)
-
-## MiniMax-M2 Özellikleri / MiniMax-M2 Highlights
+## MiniMax-M2 Avantajları
 
 Bu şablonlar MiniMax-M2'nin güçlü yönlerinden yararlanır:
 
-- **Kod Mükemmelliği**: SWE-bench'te #1 (%69.4) ve LiveCodeBench (%83)
-- **Agentic İş Akışları**: Hata kurtarma ile karmaşık araç kullanımı
-- **Verimlilik**: Hızlı çıkarım için sadece 10B aktif parametre
-- **Düşünme Modu**: `<think>` etiketleri ile genişletilmiş muhakeme
+| Özellik | Benchmark |
+|---------|-----------|
+| SWE-bench Verified | **69.4%** (Açık kaynak #1) |
+| Terminal-Bench | **46.3%** |
+| LiveCodeBench | **83%** |
+| Aktif Parametreler | **10B** (Hızlı çıkarım) |
 
 ## Katkıda Bulunma / Contributing
 
-Yeni şablon eklemek için:
-
 1. `templates/` altında yeni dizin oluşturun
-2. `main.py`, `requirements.txt` ve `README.md` ekleyin
-3. Mevcut şablon kalıplarını takip edin
+2. `main.py`, `requirements.txt`, `README.md` ekleyin
+3. Mevcut kalıpları takip edin
 4. Pull request gönderin
 
 ## Kaynaklar / Resources
 
-- [MiniMax-M2 Dokümantasyonu](../README.md)
+- [MiniMax-M2 Ana Repo](../README.md)
 - [Tool Calling Kılavuzu](../docs/tool_calling_guide.md)
 - [Dağıtım Kılavuzları](../docs/)
 - [MiniMax Platformu](https://platform.minimax.io/)
