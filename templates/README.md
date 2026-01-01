@@ -1,8 +1,8 @@
 # MiniMax-M2 Proje Şablonları / Project Templates
 
-MiniMax-M2 ile hızlıca başlamak için kullanıma hazır **17 proje şablonu**.
+MiniMax-M2 ile hızlıca başlamak için kullanıma hazır **22 proje şablonu**.
 
-Ready-to-use **17 project templates** to quickly get started with MiniMax-M2.
+Ready-to-use **22 project templates** to quickly get started with MiniMax-M2.
 
 ## Mevcut Şablonlar / Available Templates
 
@@ -35,6 +35,7 @@ Ready-to-use **17 project templates** to quickly get started with MiniMax-M2.
 |--------|----------|----------|
 | [discord-bot](./discord-bot) | Discord botu | Sohbet botu |
 | [telegram-bot](./telegram-bot) | Telegram botu | Mesajlaşma |
+| [slack-bot](./slack-bot) | Slack botu | İş iletişimi |
 
 ### 🔧 Araç Şablonları / Tool Templates
 
@@ -45,6 +46,10 @@ Ready-to-use **17 project templates** to quickly get started with MiniMax-M2.
 | [document-summarizer](./document-summarizer) | Belge özetleme | Özetleme |
 | [translation-service](./translation-service) | Çeviri servisi | Çeviri |
 | [evaluation](./evaluation) | Benchmark aracı | Test & değerlendirme |
+| [email-assistant](./email-assistant) | Email asistanı | Email yönetimi |
+| [voice-assistant](./voice-assistant) | Ses asistanı | Sesli etkileşim |
+| [web-scraper](./web-scraper) | Web kazıyıcı | Veri çıkarma |
+| [data-pipeline](./data-pipeline) | Veri pipeline | ETL işlemleri |
 
 ### 📚 Entegrasyonlar / Integrations
 
@@ -112,6 +117,10 @@ export MINIMAX_API_BASE="https://api.minimax.chat/v1"
 1. `document-summarizer` - Özetleme
 2. `translation-service` - Çeviri
 3. `coding-assistant` - Kod yazma
+4. `web-scraper` - Web kazıma
+5. `data-pipeline` - Veri işleme
+6. `email-assistant` - Email yönetimi
+7. `voice-assistant` - Sesli asistan
 
 ## MiniMax-M2 Avantajları
 
