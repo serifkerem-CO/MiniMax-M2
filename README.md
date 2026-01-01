@@ -31,7 +31,7 @@
     MiniMax Website
   </a> 
 </div>
-<div align="center" style="lline-height: 1.2; font-size:16px; margin-bottom: 30px;">
+<div align="center" style="line-height: 1.2; font-size:16px; margin-bottom: 30px;">
   <a href="https://huggingface.co/MiniMaxAI" target="_blank" style="margin: 2px;">
     🤗 Hugging Face 
   </a> | 
