@@ -1,0 +1,139 @@
+{
+  "model_name": "12. İnci (Pearl) Modeli",
+  "version": "1.0.0",
+  "description": "Real-time Emotion AI for modulLLM.com",
+
+  "minimax": {
+    "model": "MiniMax-Text-01",
+    "temperature": 1.0,
+    "top_p": 0.95,
+    "top_k": 40,
+    "max_tokens": 1024,
+    "enable_thinking": true
+  },
+
+  "emotions": {
+    "categories": [
+      {
+        "id": 1,
+        "type": "joy",
+        "label_tr": "Mutluluk",
+        "label_en": "Joy",
+        "emoji": "😊",
+        "color": "#fbbf24"
+      },
+      {
+        "id": 2,
+        "type": "sadness",
+        "label_tr": "Üzüntü",
+        "label_en": "Sadness",
+        "emoji": "😢",
+        "color": "#60a5fa"
+      },
+      {
+        "id": 3,
+        "type": "anger",
+        "label_tr": "Öfke",
+        "label_en": "Anger",
+        "emoji": "😠",
+        "color": "#f87171"
+      },
+      {
+        "id": 4,
+        "type": "fear",
+        "label_tr": "Korku",
+        "label_en": "Fear",
+        "emoji": "😨",
+        "color": "#a78bfa"
+      },
+      {
+        "id": 5,
+        "type": "disgust",
+        "label_tr": "Tiksinme",
+        "label_en": "Disgust",
+        "emoji": "🤢",
+        "color": "#86efac"
+      },
+      {
+        "id": 6,
+        "type": "surprise",
+        "label_tr": "Şaşkınlık",
+        "label_en": "Surprise",
+        "emoji": "😲",
+        "color": "#fde047"
+      },
+      {
+        "id": 7,
+        "type": "love",
+        "label_tr": "Sevgi",
+        "label_en": "Love",
+        "emoji": "❤️",
+        "color": "#fb7185"
+      },
+      {
+        "id": 8,
+        "type": "curiosity",
+        "label_tr": "Merak",
+        "label_en": "Curiosity",
+        "emoji": "🤔",
+        "color": "#38bdf8"
+      },
+      {
+        "id": 9,
+        "type": "peace",
+        "label_tr": "Huzur",
+        "label_en": "Peace",
+        "emoji": "😌",
+        "color": "#5eead4"
+      },
+      {
+        "id": 10,
+        "type": "confidence",
+        "label_tr": "Güven",
+        "label_en": "Confidence",
+        "emoji": "💪",
+        "color": "#34d399"
+      },
+      {
+        "id": 11,
+        "type": "regret",
+        "label_tr": "Pişmanlık",
+        "label_en": "Regret",
+        "emoji": "😔",
+        "color": "#94a3b8"
+      },
+      {
+        "id": 12,
+        "type": "excitement",
+        "label_tr": "Heyecan",
+        "label_en": "Excitement",
+        "emoji": "🎉",
+        "color": "#f472b6"
+      }
+    ],
+    "detection_threshold": 0.5,
+    "max_emotions_per_analysis": 3
+  },
+
+  "response_generation": {
+    "enable_emotion_context": true,
+    "enable_empathy": true,
+    "enable_turkish_support": true,
+    "max_response_length": 500,
+    "tone_adjustment": true
+  },
+
+  "performance": {
+    "cache_enabled": true,
+    "cache_ttl": 3600,
+    "rate_limit_per_minute": 60,
+    "max_concurrent_connections": 1000
+  },
+
+  "security": {
+    "enable_input_sanitization": true,
+    "enable_rate_limiting": true,
+    "enable_cors": true,
+    "max_message_length": 5000
+  }
+}

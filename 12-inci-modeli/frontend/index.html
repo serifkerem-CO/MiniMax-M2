@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>12. İnci Modeli - modulLLM.com</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <header class="header">
+            <div class="logo">
+                <span class="pearl-icon">💎</span>
+                <h1>12. İnci Modeli</h1>
+            </div>
+            <div class="tagline">
+                <p>Real-time Emotion AI by <strong>modulLLM.com</strong></p>
+            </div>
+        </header>
+
+        <!-- Main Chat Area -->
+        <main class="main-content">
+            <!-- Emotion Indicators -->
+            <div class="emotion-panel">
+                <h3>Algılanan Duygular</h3>
+                <div id="emotion-display" class="emotion-display">
+                    <div class="emotion-placeholder">
+                        Mesaj gönderin, duygularınızı analiz edelim...
+                    </div>
+                </div>
+            </div>
+
+            <!-- Chat Container -->
+            <div class="chat-container">
+                <div id="chat-messages" class="chat-messages">
+                    <div class="system-message">
+                        <p>👋 Merhaba! Ben 12. İnci Modeli. Duygularınızı anlıyor ve size en uygun şekilde yanıt veriyorum.</p>
+                        <p class="emotion-categories">
+                            <strong>12 Duygu Kategorim:</strong><br>
+                            😊 Mutluluk | 😢 Üzüntü | 😠 Öfke | 😨 Korku<br>
+                            🤢 Tiksinme | 😲 Şaşkınlık | ❤️ Sevgi | 🤔 Merak<br>
+                            😌 Huzur | 💪 Güven | 😔 Pişmanlık | 🎉 Heyecan
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Input Area -->
+                <div class="input-container">
+                    <div class="connection-status" id="connection-status">
+                        <span class="status-dot disconnected"></span>
+                        <span id="status-text">Bağlanıyor...</span>
+                    </div>
+                    <div class="input-wrapper">
+                        <textarea
+                            id="user-input"
+                            placeholder="Duygularınızı paylaşın..."
+                            rows="3"
+                        ></textarea>
+                        <button id="send-button" class="send-button" disabled>
+                            <span>Gönder</span>
+                            <span class="send-icon">📤</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </main>
+
+        <!-- Footer -->
+        <footer class="footer">
+            <p>Powered by <strong>MiniMax-M2</strong> | <a href="https://modulllm.com" target="_blank">modulLLM.com</a></p>
+        </footer>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>
