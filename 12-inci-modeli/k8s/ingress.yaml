@@ -1,0 +1,48 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: inci12-ingress
+  annotations:
+    kubernetes.io/ingress.class: nginx
+    cert-manager.io/cluster-issuer: letsencrypt-prod
+    nginx.ingress.kubernetes.io/ssl-redirect: "true"
+    nginx.ingress.kubernetes.io/websocket-services: "inci12-api"
+    nginx.ingress.kubernetes.io/proxy-read-timeout: "3600"
+    nginx.ingress.kubernetes.io/proxy-send-timeout: "3600"
+spec:
+  tls:
+  - hosts:
+    - api.modulllm.com
+    - modulllm.com
+    secretName: inci12-tls
+  rules:
+  # Frontend
+  - host: modulllm.com
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: inci12-frontend
+            port:
+              number: 80
+  # API
+  - host: api.modulllm.com
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: inci12-api
+            port:
+              number: 80
+      # WebSocket endpoint
+      - path: /ws
+        pathType: Prefix
+        backend:
+          service:
+            name: inci12-api
+            port:
+              number: 80
