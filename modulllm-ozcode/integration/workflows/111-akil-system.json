@@ -1,0 +1,339 @@
+{
+  "name": "MODULllm - 111 Akıl System",
+  "nodes": [
+    {
+      "parameters": {
+        "path": "111-akil",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "id": "webhook-1",
+      "name": "Webhook - 111 Akıl Trigger",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 1,
+      "position": [250, 300]
+    },
+    {
+      "parameters": {
+        "jsCode": "const soru = $input.item.json.soru;\nconst context = $input.item.json.context || '';\n\nreturn {\n  soru,\n  context,\n  timestamp: new Date().toISOString(),\n  platform: 'MODULllm.com'\n};"
+      },
+      "id": "code-1",
+      "name": "Parse Input",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [450, 300]
+    },
+    {
+      "parameters": {
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "googleAiApi",
+        "url": "https://generativelanguage.googleapis.com/v1beta/models/gemini-ultra:generateContent",
+        "method": "POST",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"contents\": [{\n    \"role\": \"user\",\n    \"parts\": [{\n      \"text\": \"Yaratıcı ve vizyoner perspektiften değerlendir: {{ $json.soru }}\"\n    }]\n  }]\n}",
+        "options": {}
+      },
+      "id": "http-1",
+      "name": "Gemini Ultra - Creative Vision",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.1,
+      "position": [650, 100]
+    },
+    {
+      "parameters": {
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "openAiApi",
+        "resource": "chat",
+        "model": "gpt-4-turbo-preview",
+        "messages": {
+          "values": [
+            {
+              "role": "system",
+              "content": "Sen analitik ve veri odaklı bir AI'sın. Derinlemesine analiz yap."
+            },
+            {
+              "role": "user",
+              "content": "={{ $json.soru }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "openai-1",
+      "name": "GPT-4 - Analytical Deep Dive",
+      "type": "n8n-nodes-base.openAi",
+      "typeVersion": 1,
+      "position": [650, 250]
+    },
+    {
+      "parameters": {
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "anthropicApi",
+        "resource": "message",
+        "model": "claude-3-opus-20240229",
+        "text": "=Stratejik ve uzun vadeli perspektiften değerlendir: {{ $json.soru }}",
+        "options": {}
+      },
+      "id": "anthropic-1",
+      "name": "Claude 3 Opus - Strategic Planning",
+      "type": "n8n-nodes-base.anthropic",
+      "typeVersion": 1,
+      "position": [650, 400]
+    },
+    {
+      "parameters": {
+        "url": "https://api.minimax.chat/v1/chat/completions",
+        "method": "POST",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"model\": \"MiniMax-M2\",\n  \"messages\": [\n    {\n      \"role\": \"system\",\n      \"content\": \"Sen teknik ve mühendislik odaklı bir AI'sın.\"\n    },\n    {\n      \"role\": \"user\",\n      \"content\": \"{{ $json.soru }}\"\n    }\n  ]\n}",
+        "options": {}
+      },
+      "id": "http-2",
+      "name": "MiniMax-M2 - Technical Excellence",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.1,
+      "position": [650, 550]
+    },
+    {
+      "parameters": {
+        "url": "http://localhost:11434/api/generate",
+        "method": "POST",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"model\": \"llama3\",\n  \"prompt\": \"Pragmatik ve uygulanabilir çözüm öner: {{ $json.soru }}\",\n  \"stream\": false\n}",
+        "options": {}
+      },
+      "id": "http-3",
+      "name": "Llama 3 Local - Pragmatic Solutions",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.1,
+      "position": [650, 700]
+    },
+    {
+      "parameters": {
+        "mode": "mergeByIndex"
+      },
+      "id": "merge-1",
+      "name": "Merge All Perspectives",
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 2.1,
+      "position": [850, 400]
+    },
+    {
+      "parameters": {
+        "jsCode": "const perspectives = {\n  gemini_creative: $('Gemini Ultra - Creative Vision').item.json.candidates[0].content.parts[0].text,\n  gpt4_analytical: $('GPT-4 - Analytical Deep Dive').item.json.choices[0].message.content,\n  claude_strategic: $('Claude 3 Opus - Strategic Planning').item.json.content[0].text,\n  minimax_technical: $('MiniMax-M2 - Technical Excellence').item.json.choices[0].message.content,\n  llama_pragmatic: $('Llama 3 Local - Pragmatic Solutions').item.json.response\n};\n\nconst soru = $('Parse Input').item.json.soru;\n\nreturn {\n  soru,\n  perspectives,\n  synthesis_prompt: `ULTIMATE SENTEZ OLUŞTUR:\n\nSoru: ${soru}\n\n## Gemini Ultra (Yaratıcı Vizyon):\n${perspectives.gemini_creative}\n\n## GPT-4 (Analitik):\n${perspectives.gpt4_analytical}\n\n## Claude 3 (Stratejik):\n${perspectives.claude_strategic}\n\n## MiniMax-M2 (Teknik):\n${perspectives.minimax_technical}\n\n## Llama 3 (Pragmatik):\n${perspectives.llama_pragmatic}\n\nTüm bu perspektifleri harmonize ederek, kapsamlı ve özgün bir ULTIMATE SENTEZ oluştur:`\n};"
+      },
+      "id": "code-2",
+      "name": "Prepare Ultimate Synthesis",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [1050, 400]
+    },
+    {
+      "parameters": {
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "googleAiApi",
+        "url": "https://generativelanguage.googleapis.com/v1beta/models/gemini-ultra:generateContent",
+        "method": "POST",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"contents\": [{\n    \"role\": \"user\",\n    \"parts\": [{\n      \"text\": \"{{ $json.synthesis_prompt }}\"\n    }]\n  }]\n}",
+        "options": {}
+      },
+      "id": "http-4",
+      "name": "Ultimate Synthesis (111. Akıl)",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.1,
+      "position": [1250, 400]
+    },
+    {
+      "parameters": {
+        "jsCode": "const soru = $('Parse Input').item.json.soru;\nconst perspectives = $('Prepare Ultimate Synthesis').item.json.perspectives;\nconst synthesis = $json.candidates[0].content.parts[0].text;\n\nreturn {\n  success: true,\n  soru,\n  perspectives,\n  ultimate_synthesis: synthesis,\n  platform: 'MODULllm.com - 111 Akıl via n8n',\n  timestamp: new Date().toISOString(),\n  llms_used: ['gemini-ultra', 'gpt-4', 'claude-3-opus', 'minimax-m2', 'llama-3'],\n  total_perspectives: 5 + 1\n};"
+      },
+      "id": "code-3",
+      "name": "Format Final Response",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [1450, 400]
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={{ JSON.stringify($json, null, 2) }}",
+        "options": {}
+      },
+      "id": "webhook-respond-1",
+      "name": "Respond to Webhook",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1,
+      "position": [1650, 400]
+    }
+  ],
+  "connections": {
+    "Webhook - 111 Akıl Trigger": {
+      "main": [
+        [
+          {
+            "node": "Parse Input",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Parse Input": {
+      "main": [
+        [
+          {
+            "node": "Gemini Ultra - Creative Vision",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "GPT-4 - Analytical Deep Dive",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Claude 3 Opus - Strategic Planning",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "MiniMax-M2 - Technical Excellence",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Llama 3 Local - Pragmatic Solutions",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Gemini Ultra - Creative Vision": {
+      "main": [
+        [
+          {
+            "node": "Merge All Perspectives",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "GPT-4 - Analytical Deep Dive": {
+      "main": [
+        [
+          {
+            "node": "Merge All Perspectives",
+            "type": "main",
+            "index": 1
+          }
+        ]
+      ]
+    },
+    "Claude 3 Opus - Strategic Planning": {
+      "main": [
+        [
+          {
+            "node": "Merge All Perspectives",
+            "type": "main",
+            "index": 2
+          }
+        ]
+      ]
+    },
+    "MiniMax-M2 - Technical Excellence": {
+      "main": [
+        [
+          {
+            "node": "Merge All Perspectives",
+            "type": "main",
+            "index": 3
+          }
+        ]
+      ]
+    },
+    "Llama 3 Local - Pragmatic Solutions": {
+      "main": [
+        [
+          {
+            "node": "Merge All Perspectives",
+            "type": "main",
+            "index": 4
+          }
+        ]
+      ]
+    },
+    "Merge All Perspectives": {
+      "main": [
+        [
+          {
+            "node": "Prepare Ultimate Synthesis",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Prepare Ultimate Synthesis": {
+      "main": [
+        [
+          {
+            "node": "Ultimate Synthesis (111. Akıl)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Ultimate Synthesis (111. Akıl)": {
+      "main": [
+        [
+          {
+            "node": "Format Final Response",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Format Final Response": {
+      "main": [
+        [
+          {
+            "node": "Respond to Webhook",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "pinData": {},
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "staticData": null,
+  "tags": [
+    {
+      "name": "modulllm",
+      "id": "tag1"
+    },
+    {
+      "name": "111-akil",
+      "id": "tag2"
+    },
+    {
+      "name": "multi-llm",
+      "id": "tag3"
+    }
+  ],
+  "triggerCount": 0,
+  "updatedAt": "2026-01-05T00:00:00.000Z",
+  "versionId": "1"
+}
