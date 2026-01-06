@@ -76,16 +76,15 @@ def get_default_tools():
           "name": "get_current_weather",
           "description": "Get the latest weather for a location",
           "parameters": {
-              "type": "object", 
+              "type": "object",
               "properties": {
                   "location": {
-                      "type": "string", 
+                      "type": "string",
                       "description": "A certain city, such as Beijing, Shanghai"
                   }
-              }, 
+              },
+              "required": ["location"]
           }
-          "required": ["location"],
-          "type": "object"
         }
     ]
 
