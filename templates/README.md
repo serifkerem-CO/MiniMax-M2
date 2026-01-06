@@ -1,8 +1,8 @@
 # MiniMax-M2 Proje Şablonları / Project Templates
 
-MiniMax-M2 ile hızlıca başlamak için kullanıma hazır **22 proje şablonu**.
+MiniMax-M2 ile hızlıca başlamak için kullanıma hazır **27 proje şablonu**.
 
-Ready-to-use **22 project templates** to quickly get started with MiniMax-M2.
+Ready-to-use **27 project templates** to quickly get started with MiniMax-M2.
 
 ## Mevcut Şablonlar / Available Templates
 
@@ -50,6 +50,16 @@ Ready-to-use **22 project templates** to quickly get started with MiniMax-M2.
 | [voice-assistant](./voice-assistant) | Ses asistanı | Sesli etkileşim |
 | [web-scraper](./web-scraper) | Web kazıyıcı | Veri çıkarma |
 | [data-pipeline](./data-pipeline) | Veri pipeline | ETL işlemleri |
+
+### 🛠️ Geliştirici Araçları / Developer Tools
+
+| Şablon | Açıklama | Kullanım |
+|--------|----------|----------|
+| [code-reviewer](./code-reviewer) | Kod inceleme | Kalite analizi |
+| [sql-assistant](./sql-assistant) | SQL asistanı | Veritabanı |
+| [test-generator](./test-generator) | Test üretici | Test yazma |
+| [log-analyzer](./log-analyzer) | Log analizci | Hata ayıklama |
+| [api-docs-generator](./api-docs-generator) | API dokümantasyon | OpenAPI/Swagger |
 
 ### 📚 Entegrasyonlar / Integrations
 
@@ -121,6 +131,13 @@ export MINIMAX_API_BASE="https://api.minimax.chat/v1"
 5. `data-pipeline` - Veri işleme
 6. `email-assistant` - Email yönetimi
 7. `voice-assistant` - Sesli asistan
+
+### Geliştirici Araçları
+1. `code-reviewer` - Kod inceleme
+2. `sql-assistant` - SQL sorgu üretimi
+3. `test-generator` - Otomatik test
+4. `log-analyzer` - Log analizi
+5. `api-docs-generator` - API dokümantasyon
 
 ## MiniMax-M2 Avantajları
 
