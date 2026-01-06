@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>12. İnci Analytics Dashboard</title>
+    <link rel="stylesheet" href="dashboard.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+</head>
+<body>
+    <div class="dashboard-container">
+        <!-- Header -->
+        <header class="dashboard-header">
+            <div class="header-content">
+                <h1>💎 12. İnci Modeli - Analytics Dashboard</h1>
+                <div class="header-stats">
+                    <span id="live-indicator" class="live-indicator">● LIVE</span>
+                    <span id="last-update">Last update: --:--</span>
+                </div>
+            </div>
+        </header>
+
+        <!-- Main Dashboard -->
+        <main class="dashboard-main">
+            <!-- KPI Cards -->
+            <section class="kpi-section">
+                <div class="kpi-card">
+                    <div class="kpi-icon">📊</div>
+                    <div class="kpi-content">
+                        <h3>Total Requests</h3>
+                        <p class="kpi-value" id="total-requests">0</p>
+                        <span class="kpi-change positive">+12% from last hour</span>
+                    </div>
+                </div>
+
+                <div class="kpi-card">
+                    <div class="kpi-icon">👥</div>
+                    <div class="kpi-content">
+                        <h3>Active Users</h3>
+                        <p class="kpi-value" id="active-users">0</p>
+                        <span class="kpi-change positive">+5 new today</span>
+                    </div>
+                </div>
+
+                <div class="kpi-card">
+                    <div class="kpi-icon">⚡</div>
+                    <div class="kpi-content">
+                        <h3>Avg Response Time</h3>
+                        <p class="kpi-value" id="avg-response-time">0ms</p>
+                        <span class="kpi-change negative">+15ms slower</span>
+                    </div>
+                </div>
+
+                <div class="kpi-card">
+                    <div class="kpi-icon">😊</div>
+                    <div class="kpi-content">
+                        <h3>Top Emotion</h3>
+                        <p class="kpi-value" id="top-emotion">Joy</p>
+                        <span class="kpi-change">42% of total</span>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Charts Section -->
+            <section class="charts-section">
+                <!-- Emotion Distribution -->
+                <div class="chart-card">
+                    <div class="chart-header">
+                        <h2>Emotion Distribution (24h)</h2>
+                        <button class="refresh-btn" onclick="refreshCharts()">🔄 Refresh</button>
+                    </div>
+                    <canvas id="emotionChart"></canvas>
+                </div>
+
+                <!-- Hourly Traffic -->
+                <div class="chart-card">
+                    <div class="chart-header">
+                        <h2>Hourly Requests</h2>
+                        <select id="timeRange" onchange="updateTimeRange()">
+                            <option value="24h">Last 24 Hours</option>
+                            <option value="7d">Last 7 Days</option>
+                            <option value="30d">Last 30 Days</option>
+                        </select>
+                    </div>
+                    <canvas id="trafficChart"></canvas>
+                </div>
+
+                <!-- Response Time -->
+                <div class="chart-card">
+                    <div class="chart-header">
+                        <h2>Response Time Performance</h2>
+                    </div>
+                    <canvas id="performanceChart"></canvas>
+                </div>
+
+                <!-- Top Emotions List -->
+                <div class="chart-card emotions-list">
+                    <div class="chart-header">
+                        <h2>Top 12 Emotions</h2>
+                    </div>
+                    <div id="emotionsList" class="emotions-list-content">
+                        <!-- Will be populated by JS -->
+                    </div>
+                </div>
+            </section>
+
+            <!-- Real-time Activity Feed -->
+            <section class="activity-section">
+                <div class="activity-card">
+                    <div class="chart-header">
+                        <h2>📡 Real-time Activity Feed</h2>
+                        <span class="activity-count" id="activity-count">0 events</span>
+                    </div>
+                    <div id="activityFeed" class="activity-feed">
+                        <!-- Real-time events -->
+                    </div>
+                </div>
+            </section>
+
+            <!-- System Status -->
+            <section class="status-section">
+                <div class="status-card">
+                    <h2>System Status</h2>
+                    <div class="status-grid">
+                        <div class="status-item">
+                            <span class="status-label">API Server</span>
+                            <span class="status-badge status-online">● Online</span>
+                        </div>
+                        <div class="status-item">
+                            <span class="status-label">MiniMax-M2</span>
+                            <span class="status-badge status-online">● Connected</span>
+                        </div>
+                        <div class="status-item">
+                            <span class="status-label">Redis Cache</span>
+                            <span class="status-badge status-online">● Active</span>
+                        </div>
+                        <div class="status-item">
+                            <span class="status-label">Database</span>
+                            <span class="status-badge status-online">● Healthy</span>
+                        </div>
+                        <div class="status-item">
+                            <span class="status-label">WebSocket</span>
+                            <span class="status-badge status-online">● Running</span>
+                        </div>
+                        <div class="status-item">
+                            <span class="status-label">Analytics</span>
+                            <span class="status-badge status-online">● Recording</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="status-card">
+                    <h2>Performance Metrics</h2>
+                    <div class="metrics-grid">
+                        <div class="metric-item">
+                            <span class="metric-label">Uptime</span>
+                            <span class="metric-value">99.9%</span>
+                        </div>
+                        <div class="metric-item">
+                            <span class="metric-label">Cache Hit Rate</span>
+                            <span class="metric-value">87.3%</span>
+                        </div>
+                        <div class="metric-item">
+                            <span class="metric-label">Error Rate</span>
+                            <span class="metric-value">0.02%</span>
+                        </div>
+                        <div class="metric-item">
+                            <span class="metric-label">P95 Latency</span>
+                            <span class="metric-value">245ms</span>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <script src="dashboard.js"></script>
+</body>
+</html>
