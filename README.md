@@ -182,7 +182,33 @@ Please refer to our [Tool Calling Guide](https://huggingface.co/MiniMaxAI/MiniMa
 
 > The projects below are built and maintained by the community/partners. They are not official MiniMax products, and results may vary.
 
-- **AnyCoder** — a web IDE–style coding assistant Space on Hugging Face, **uses MiniMax-M2 as the default model**: https://huggingface.co/spaces/akhaliq/anycoder  
+## 🌌 Featured: MODULllm.com - Complete AI Platform Ecosystem
+
+**MODULllm.com** is a comprehensive AI-powered platform ecosystem built on MiniMax-M2, featuring:
+
+- **🧠 111 Akıl System**: 11 different AI perspectives + synthesis = Ultimate intelligence
+- **🎓 B1Z KODLAB**: AI-powered coding education platform with interactive learning
+- **🔗 Multi-LLM Orchestration**: n8n workflow automation integrating 5 LLM platforms
+- **💾 Öz Veritabanı**: Self-learning knowledge base that grows from own data
+- **📊 Real-Time Monitoring**: Production-ready dashboard and alerting
+- **🚀 One-Command Deploy**: Complete Docker-based deployment automation
+
+**Tech Stack:** FastAPI, React + TypeScript, n8n, Docker, Redis, Monaco Editor
+
+**Quick Start:**
+```bash
+cd modulllm-ozcode
+./deploy_everything.sh
+# Platform ready at http://localhost:8000
+```
+
+**Documentation:** See [`modulllm-ozcode/COMPLETE_PLATFORM_GUIDE.md`](modulllm-ozcode/COMPLETE_PLATFORM_GUIDE.md) for full guide.
+
+**Philosophy:** *"Öz Kodundan Doğ"* (Born from Own Code) - A self-sufficient, autonomous AI platform.
+
+---
+
+- **AnyCoder** — a web IDE–style coding assistant Space on Hugging Face, **uses MiniMax-M2 as the default model**: https://huggingface.co/spaces/akhaliq/anycoder
   *Maintainer:* @akhaliq (Hugging Face)
 
 
